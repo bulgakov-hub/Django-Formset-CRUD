@@ -14,7 +14,7 @@ $ git clone https://github.com/bulgakov-hub/Django-Formset-CRUD.git
 ```
 Create a virtual environment
 ```bash
-$ source venv/bin/activate
+$ python3 -m venv venv
 ```
 Activate the virtual environment 
 ```bash
