@@ -7,3 +7,28 @@
 ![Image alt](https://github.com/bulgakov-hub/Django-Formset-CRUD/blob/master/image/2020-10-19_16-32-34.png)
 
 ### Install
+
+Clone a repository
+```bash
+$ git clone https://github.com/bulgakov-hub/Django-Formset-CRUD.git
+```
+Create a virtual environment
+```bash
+$ source venv/bin/activate
+```
+Activate the virtual environment 
+```bash
+$ source venv/bin/activate
+```
+Install requirements
+```bash
+$ pip install -r requirements.txt
+```
+Migrations
+```bash
+$ ./manage.py migrate
+```
+Run server
+```bash
+$ ./manage.py runserver
+```
