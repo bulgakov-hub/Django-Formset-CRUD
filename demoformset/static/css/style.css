@@ -1,0 +1,137 @@
+body {
+	color: #404040 !important;
+}
+h1 {
+	margin-top: 10px;
+	text-align: center;
+}
+a:hover { 
+	text-decoration: none !important;
+} 
+.empty_list {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.form_fields {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.form-control {
+	font-weight: 700;
+}
+.input-group-text {
+	font-weight: 700;
+}
+
+.table td {
+	max-width: 200px !important;
+	overflow-wrap: break-word !important;
+}
+
+/*Custom toast bootstrap*/
+
+.toast {
+	background-color: #28a745!important;
+}
+.toast-header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #28a745!important;
+	color: #fff !important;
+}
+.toast-body {
+	color: #fff !important;
+}
+
+/* Input Вопросы*/
+.question-number {
+	height: 50px;
+	width: 45px;
+}
+
+.question-input{
+	width: 50px;
+	height: 45px;
+	border: 2px solid #a2a2a2;
+	border-radius: 8px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #6c757d;
+	background-color: #fff5a0;
+}
+
+/*Custom CheckBox Ответы*/
+
+.custom-control { 
+	position: relative; 
+	display: block; 
+	min-height: 1.5rem; 
+	padding-left: 1.5rem;
+} 
+
+.custom-checkbox {
+	height: 50px;
+	width: 50px;
+	margin: 2px;
+}
+
+.custom-control-input { 
+	position: absolute; 
+	z-index: -1; 
+	opacity: 0;
+} 
+
+input[type="checkbox"] { 
+	box-sizing: border-box; 
+	padding: 0; 
+} 
+
+.custom-control-label { 
+	position: relative; 
+	margin-bottom: 0; 
+	vertical-align: top;
+} 
+
+.custom-control-label:before { 
+	position: absolute; 
+	top: .25rem; 
+	left: -1.5rem; 
+	display: block; 
+	width: 48px; 
+	height: 48px;
+	padding: 10px; 
+	pointer-events: none; 
+	content: ""; 
+	background-color: #fff;
+	border: 1px solid #adb5bd;
+	border-radius: .25rem; 
+	transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out; 
+	transition-duration: 0.15s, 0.15s, 0.15s; 
+	transition-timing-function: ease-in-out, ease-in-out, ease-in-out; 
+	transition-delay: 0s, 0s, 0s; 
+	transition-property: background-color, border-color, box-shadow; 
+} 
+
+.custom-control-label:after { 
+	width: 48px; 
+	height: 48px; 
+	padding: 10px; 
+	background-position: right bottom !important; 
+	left: -1.7rem; 
+	top: 0; 
+	bottom: 0; 
+	font-size: 13px; 
+	font-weight: bold; 
+	color: white; 
+	padding: 10px;
+	background-position-x: right !important; 
+	background-position-y: bottom !important;
+} 
+
+
+

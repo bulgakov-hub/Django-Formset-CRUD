@@ -1,0 +1,152 @@
+{% extends 'testformset/main.html' %}
+
+{% block main_data %}
+	<div class="test_list">
+		<h1><b>Список тестов</b></h1>
+			<div class="container">
+				{% if test_list %}
+						<table class="table text-muted font-weight-bold">
+							<thead>
+								<tr>
+									<th scope="col"><b>Название</b></th>
+									<th scope="col"><b>Описание</b></th>
+									<th scope="col"></th>
+									<th scope="col"></th>
+									<th scope="col"></th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for test in test_list %}
+								<tr>
+									<td>{{ test.name }}</td>
+									<td>{{ test.description }}</td>
+									<td class="text-center">
+										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_answers_test"
+										onclick= "getAnswers({'pk': '{{ test.pk }}'})"><b>Ответы</b></button>
+									</td>
+									<td class="text-center">
+										<form action="{% url 'testformset:update' pk=test.pk %}">
+											<button type="submit" class="btn btn-warning"><b>Изменить</b></button>
+										</form>
+										</td>
+									<td class="text-center">
+										<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeleteModal"
+											onclick="getTestInfo({'name': '{{ test.name }}', 
+																		'description': '{{ test.description }}', 
+																		'href': '{% url 'testformset:delete' pk=test.pk %}'
+											})"><b>Удалить</b>
+										</button>
+									</td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+						<!-- ПАГИНАЦИЯ -->
+						<div class="pagination d-flex justify-content-end">
+							<nav aria-label="pag">
+								<ul class="pagination pagination-circle pg-bluegrey">
+									{% if page_obj.has_previous %}
+										<li class="page-item">
+											<a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-disabled="false"><b>Назад</b></a>
+										</li>
+									{% else %}
+										<li class="page-item disabled">
+											<a class="page-link" href="#" tabindex="-1" aria-disabled="true"><b>Назад</b></a>
+										</li>
+									{% endif %}
+									{% for n in page_obj.paginator.page_range %}
+										{% if page_obj.number == n %}
+											<li class="page-item active" aria-current="page">
+												<a class="page-link" href="?page={{ n }}"><b>{{ n }}</b> <span class="sr-only">(current)</span></a>
+											</li>
+										{% elif n > page_obj.number|add:-3 and n < page_obj.number|add:3 %}
+											<li class="page-item">
+												<a class="page-link" href="?page={{ n }}"><b>{{ n }}</b></a>
+											</li>
+										{% endif %}
+									{% endfor %}
+									{% if page_obj.has_next %}
+										<li class="page-item">
+											<a class="page-link" href="?page={{ page_obj.next_page_number }}" tabindex="-1" aria-disabled="false"><b>Вперед</b></a>
+										</li>
+									{% else %}
+										<li class="page-item disabled">
+											<a class="page-link" href="#" tabindex="-1" aria-disabled="true"><b>Вперед</b></a>
+										</li>
+									{% endif %}
+								</ul>
+							</nav>
+						</div>
+						<!-- (конец) ПАГИНАЦИЯ -->
+				{% else %}
+				<div class="empty_list">
+					<p><b>Список пуст необходимо добавить тест</b></p>
+				</div>
+				{% endif %}
+				<div class="settings {% if not test_list %} text-center {% endif %}">
+					<form action="{% url 'testformset:create' %}">
+						<button type="submit" class="btn btn-primary btn-lg"><b>Добавить</b></button>
+					</form>
+				</div>
+			</div>
+	</div>
+	<!-- Модальное окно Удаление-->
+	<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title font-weight-bold text-muted" id="DeleteModalLabel"><b>Вы действительно хотите удалить тест?</b></h5>
+						<button id="close_button" type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+				</div>
+				<div class="modal-body font-weight-bold text-muted">
+					<p><b>Название: <span id="name_test_modal"></span></b></p>
+					<p><b>Описание: <span id="description_test_modal"></span></b></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"><b>Закрыть</b></button>
+					<form id="form_modal_delete" action="" method="POST">
+						{% csrf_token %}
+						<button type="submit" name="delete" class="btn btn-danger"><b>Удалить тест</b></button>
+					</form>
+				</div>
+			</div>
+	  </div>
+	</div>
+	<!-- (конец) Модальное окно Удаление-->
+	<!-- Модальное окно ответы на тест-->
+          <div class="modal fade" id="modal_answers_test" tabindex="-1" role="dialog" aria-labelledby="modal_answers"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold text-muted" id="modal_answers">Ответы на вопросы</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    {% include 'testformset/modal_answers_list.html' %}
+                  </div>
+                </div>
+              </div>
+            </div>
+    <!-- (конец) Модальное окно ответы на тест -->
+	<script>
+		function getTestInfo(data){
+			name_test_modal.innerHTML = data.name;
+			description_test_modal.innerHTML = data.description;
+			form_modal_delete.setAttribute('action', data.href);
+		};
+		function getAnswers(data){
+	    $.post( "{% url 'testformset:get_answers' %}", { testbox_id: data.pk })
+        .done(function( data ) {
+          $('.group-answers').html(data);
+          
+        });
+    
+  };
+
+	</script>
+{% endblock main_data %}
