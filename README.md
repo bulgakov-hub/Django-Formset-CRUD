@@ -1,2 +1,5 @@
 # Django-Formset-CRUD
-## django inlineformset with nested forms, bootstrap, custom checkbox, simple toast messages, modal ...
+## django inlineformset with nested forms, bootstrap template, 
+## custom checkbox, simple toast messages, modal ...
+
+Screenshots:
