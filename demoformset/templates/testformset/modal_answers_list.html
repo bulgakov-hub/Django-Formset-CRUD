@@ -12,25 +12,23 @@
         {% endif %}
       {% endfor %}
     </div>
-  {% for item in question %}
-  <div class="block d-flex flex-column align-self-start font-weight-bold text-muted ml-3 mb-3">
-    <div class="item-question text-center">
-      <span class="badge badge-pill badge-secondary">{{ item.question }}</span>
-    </div>
-    {% for answer in item.question_answer.all %}
-          
-          {% if answer.right == True %}
+    {% for item in question %}
+    <div class="block d-flex flex-column align-self-start font-weight-bold text-muted ml-3 mb-3">
+      <div class="item-question text-center">
+        <span class="badge badge-pill badge-secondary">{{ item.question }}</span>
+      </div>
+      {% for answer in item.question_answer.all %}
+        {% if answer.right == True %}
           <div class="item-answer text-center">
             <span class="badge badge-pill badge-info">{{ answer.prefix_name }}</span>
           </div>
-          {% endif %}
-    {% empty %}
-    <div class="item-answer text-center">
-      <span class="blue-text">-</span>
+        {% endif %}
+      {% empty %}
+      <div class="item-answer text-center">
+        <span class="blue-text">-</span>
+      </div>
+      {% endfor %}
     </div>
     {% endfor %}
   </div>
-  {% endfor %}
-  </div>
-
 </div>

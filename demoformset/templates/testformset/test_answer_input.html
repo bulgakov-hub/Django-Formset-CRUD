@@ -1,54 +1,59 @@
-					<!-- Formset Вопросов и ответов -->
-					<div class="group-answers">
-						<h4 class="text-center"><b>Укажите ответы на вопросы</b></h4>
-						<div class="group-prefix-name d-flex flex-wrap">
-							<div class="d-flex flex-wrap my-2">
-								{{ question_set.management_form }}
-								{% for question in question_set.forms %}
-									<div class="questions-flex d-flex flex-column mb-4">
-										{{ question.id }} {{ question.test_box }}
-										<div class="question-number">
-											{{ question.question }} 
-										</div>
-										{{ question.nested.management_form }}
-										<div class="answers-flex d-flex flex-column ">
-											{% if question.nested %}
-												{% for prefix in answers_prefix %}
-													{% for nested_form in question.nested.forms %}
-														{% if prefix.prefix_name == nested_form.prefix_name.value %}
-															{{ nested_form.id }}
-															{{ nested_form.prefix_name }}
-															<div class="custom-control custom-checkbox justify-content-center align-items-center ">
-																<input type="checkbox" class="custom-control-input" id="{{ nested_form.right.auto_id }}"
-																	name="{{ nested_form.prefix }}-{{ nested_form.right.name }}" {% if nested_form.right.value == True %} checked {% endif %}>
-																<label class="custom-control-label align-self-center" for="{{ nested_form.right.auto_id }}"></label>
-															</div>
-															<style>
-																#{{ nested_form.right.auto_id }} {display:none;}
-																#{{ nested_form.right.auto_id }} + label:before {
-																	content:"{{ nested_form.prefix_name.value }}";
-																	font-size: 20px;
-																	font-width: 700 !important;
-																	text-align: center; }
-																#{{ nested_form.right.auto_id }}:checked + label:before {
-																	content:"{{ nested_form.prefix_name.value }}";
-																	font-size: 15px;
-																	text-align: left;
-																}
-																label{ color: #6c757d !important; 
-																		font-weight: bold;
-																		cursor:pointer;}
-															</style>
-														{% endif %}
-													{% endfor %}
-												{% endfor %}
-											{% else %}
-												<p>Ответы отсутствуют</p>
-											{% endif %}
-										</div>
-									</div>
-								{% endfor %}
-							</div>
-						</div>
-					</div>
-					<!-- (конец) Formset Вопросов и ответов -->
+<!-- Formset Вопросов и ответов -->
+<div class="group-answers">
+   <h4 class="text-center"><b>Укажите ответы на вопросы</b></h4>
+   <div class="group-prefix-name d-flex flex-wrap">
+      <div class="d-flex flex-wrap my-2">
+         {{ question_set.management_form }}
+         {% for question in question_set.forms %}
+         <div class="questions-flex d-flex flex-column mb-4">
+            {{ question.id }} {{ question.test_box }}
+            <div class="question-number">
+               {{ question.question }} 
+            </div>
+            {{ question.nested.management_form }}
+            <div class="answers-flex d-flex flex-column ">
+               {% if question.nested %}
+                  {% for prefix in answers_prefix %}
+                     {% for nested_form in question.nested.forms %}
+                        {% if prefix.prefix_name == nested_form.prefix_name.value %}
+                           {{ nested_form.id }}
+                           {{ nested_form.prefix_name }}
+                           <div class="custom-control custom-checkbox justify-content-center align-items-center ">
+                              <input type="checkbox" class="custom-control-input" 
+                                 id="{{ nested_form.right.auto_id }}"
+                                 name="{{ nested_form.prefix }}-{{ nested_form.right.name }}" 
+                                 {% if nested_form.right.value == True %} checked {% endif %}>
+                              <label class="custom-control-label align-self-center" for="{{ nested_form.right.auto_id }}"></label>
+                           </div>
+                           <style>
+                              #{{ nested_form.right.auto_id }} {display:none;}
+                              #{{ nested_form.right.auto_id }} + label:before {
+                                content:"{{ nested_form.prefix_name.value }}";
+                                font-size: 20px;
+                                font-width: 700 !important;
+                                text-align: center;
+                              }
+                              #{{ nested_form.right.auto_id }}:checked + label:before {
+                                content:"{{ nested_form.prefix_name.value }}";
+                                font-size: 15px;
+                                text-align: left;
+                              }
+                              label{
+                                color: #6c757d !important; 
+                                font-weight: bold;
+                                cursor:pointer;
+                              }
+                           </style>
+                        {% endif %}
+                     {% endfor %}
+                  {% endfor %}
+               {% else %}
+               <p>Ответы отсутствуют</p>
+               {% endif %}
+            </div>
+         </div>
+         {% endfor %}
+      </div>
+   </div>
+</div>
+<!-- (конец) Formset Вопросов и ответов -->

@@ -64,7 +64,7 @@ class TestCreateView(CreateView):
         else:
 
             context['question_set'] = manager_formset.create()
-            context['answers_prefix'] = manager_formset.data.set.answers
+            context['answers_prefix'] = manager_formset.set.answers
             context['title'] = 'Добавить тест'
 
         return context
@@ -113,7 +113,7 @@ def get_formset(request):
 
     manager_formset = TestManagerFormset(q, a)
     question_set = manager_formset.create()
-    answers_prefix = manager_formset.data.set.answers
+    answers_prefix = manager_formset.set.answers
 
     data = {'question_set': question_set, 'answers_prefix': answers_prefix}
 
@@ -142,7 +142,7 @@ class TestUpdateView(UpdateView):
         else:
             context['question_set'] = manager_formset.update(
                 instance=self.object)
-            context['answers_prefix'] = manager_formset.data.set.answers
+            context['answers_prefix'] = manager_formset.set.answers
             context['title'] = 'Изменить тест'
 
         return context

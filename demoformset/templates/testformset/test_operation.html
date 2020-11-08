@@ -1,121 +1,119 @@
 {% extends 'testformset/main.html' %}
-
 {% block main_data %}
-	<div class="test_list">
-		<h1><b>{{ title }}</b></h1>
-		<div class="container">
-			<form method='POST'>
-			{% csrf_token %}
-			<div class="form_fields">
-				<div class="col-lg-8 col-md-10 col-sm-11">
-					<!-- Возврат -->
-					<div class="return">
-						<a href="{{ request.META.HTTP_REFERER }}" class="d-flex align-items-center mb-3">
-							<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-left-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm9.5 8.5a.5.5 0 0 0 0-1H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5z"/>
-							</svg>
-							<h5 class="mb-0 ml-3"><b>Назад</b></h5>
-						</a>
-					</div>
-					<!-- (конец) Возврат -->
-					<!-- Название теста -->
-						<div class="form-group">
-							<input class="form-control form-control-lg mb-2" type="text" id="id_{{ form.name.name }}" 
-							name="{{ form.name.name }}"  required="required" maxlength="30" {% if form.name.value %} value="{{ form.name.value }}" {% else %} placeholder="{{ form.name.label }}" {% endif %}>
-							<small id="name_field_help" class="form-text text-danger">{{ form.name.errors }}</small>
-						</div>
-					<!-- (конец) Название теста -->
-					<!-- Описание теста -->
-						<div class="form-group">
-							<input class="form-control form-control-lg mb-2" type="text" required="required" name="{{ form.description.name }}"  {% if form.description.value %} value="{{ form.description.value }}" {% else %} placeholder="{{ form.description.label }}" {% endif %}>
-							<small id="description_field_help" class="form-text text-danger">{{ form.description.errors }}</small>
-						</div>
-					<!-- (конец) Описание теста -->
-					<!-- Количество вопросов -->
-						<input type="hidden" min="5" max="30" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="{{ form.quantity_q.value }}" id="id_{{ form.quantity_q.name }}" name="{{ form.quantity_q.name }}" required="required">
-								
-					<!-- (конец) Количество вопросов -->
-					<!-- Количество ответов -->
-						<input type="hidden" min="2" max="8" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="{{ form.quantity_a.value}}" id="id_{{ form.quantity_a.name }}" name="{{ form.quantity_a.name }}" required="required">
-					<!--(конец) Количество ответов -->
-					<!--Группа кнопок -->
-						<div class="button_block_test d-flex {% if object == None %} justify-content-between {% else %} justify-content-end {% endif %} align-items-center my-3">
-							{% if object == None %}
-							<!-- Изменить параметры -->
-							<div class="settings_button text-left">	
-									<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#SettingsModal" onclick="getSettings({'quantity_q': '{{ form.quantity_q.value }}','quantity_a': '{{ form.quantity_a.value  }}'
-														})"><b>Изменить параметры</b></button>
-							</div>
-							{% endif %}
-							<!-- (конец) Изменить параметры -->
-							<!-- Сохранить -->
-								<div class="save_button text-right">	
-										<button type="submit" class="btn btn-success btn-lg"><b>Сохранить тест</b></button>
-								</div>
-							<!-- (конец) Сохранить -->
-						</div>
-					<!-- (конец) Группа кнопок -->
-					<!-- (шаблон) Формсет вопросов и ответов -->
-							{% include 'testformset/test_answer_input.html' %}
-					<!-- (шаблон) Формсет вопросов и ответов -->
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-	<!-- Модальное окно Изменение параметров-->
-	<div class="modal fade" id="SettingsModal" tabindex="-1" aria-labelledby="SettingsModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title font-weight-bold text-muted" id="SettingsModalLabel"><b>Изменить параметры теста</b></h5>
-						<button id="close_button" type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-				</div>
-				<div class="modal-body">
-					<!-- Количество вопросов -->
-						<div class="input-group input-group-lg mb-3">
-								<div class="input-group-prepend">
-										<span class="input-group-text" id="label_settings_questions">Количество вопросов</span>
-								</div>
-								<input type="number" min="5" max="30" class="form-control" aria-label="Sizing example input" aria-describedby="label_settings_questions" value="" id="input_settings_questions" required="required">
-						</div>
-					<!-- (конец) Количество вопросов -->
-					<!-- Количество ответов -->
-						<div class="input-group input-group-lg mb-3">
-						  <div class="input-group-prepend">
-						    <span class="input-group-text" id="label_settings_answers">Варианты ответа</span>
-						  </div>
-						  <input type="number" min="2" max="8" class="form-control" aria-label="Sizing example input" aria-describedby="label_settings_answers" value="" id="input_settings_answers" required="required">
-						</div>
-					<!-- (конец) Количество ответов -->
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal"><b>Закрыть</b></button>
-					<button type="button" class="btn btn-danger" onclick='insertSettings()'><b>Изменить параметры</b></button>
-				</div>
-			</div>
-	  </div>
-	</div>
-	<!-- (конец) Модальное окно Изменение параметров-->
-	<script>
-		function getSettings(data){
-			input_settings_questions.setAttribute('value', data.quantity_q);
-			input_settings_answers.setAttribute('value', data.quantity_a);
-			
-		}
-		function insertSettings(){
-			let quantity_q = $('#input_settings_questions').val();
-			let quantity_a = $('#input_settings_answers').val();
-			$('#id_{{ form.quantity_q.name }}').val(quantity_q);
-			$('#id_{{ form.quantity_a.name }}').val(quantity_a);
-			$('#close_button').click();
-			$.post( "{% url 'testformset:set_params' %}", { q: quantity_q, 
-																			a: quantity_a })
-			.done(function( data ) {
-			$('.group-answers').html(data);
-			});
-		}
-	</script>
+<div class="test_list">
+  <h1><b>{{ title }}</b></h1>
+  <div class="container">
+    <form method='POST'>
+      {% csrf_token %}
+      <div class="form_fields">
+        <div class="col-lg-8 col-md-10 col-sm-11">
+          <!-- Возврат -->
+          <div class="return">
+            <a href="{{ request.META.HTTP_REFERER }}" class="d-flex align-items-center mb-3">
+              <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-left-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm9.5 8.5a.5.5 0 0 0 0-1H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5z"/>
+              </svg>
+              <h5 class="mb-0 ml-3"><b>Назад</b></h5>
+            </a>
+          </div>
+          <!-- (конец) Возврат -->
+          <!-- Название теста -->
+          <div class="form-group">
+            <input class="form-control form-control-lg mb-2" type="text" id="id_{{ form.name.name }}" 
+            name="{{ form.name.name }}"  required="required" maxlength="30" {% if form.name.value %} value="{{ form.name.value }}" {% else %} placeholder="{{ form.name.label }}" {% endif %}>
+            <small id="name_field_help" class="form-text text-danger">{{ form.name.errors }}</small>
+          </div>
+          <!-- (конец) Название теста -->
+          <!-- Описание теста -->
+          <div class="form-group">
+            <input class="form-control form-control-lg mb-2" type="text" required="required" name="{{ form.description.name }}"  {% if form.description.value %} value="{{ form.description.value }}" {% else %} placeholder="{{ form.description.label }}" {% endif %}>
+            <small id="description_field_help" class="form-text text-danger">{{ form.description.errors }}</small>
+          </div>
+          <!-- (конец) Описание теста -->
+          <!-- Количество вопросов -->
+          <input type="hidden" min="5" max="30" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="{{ form.quantity_q.value }}" id="id_{{ form.quantity_q.name }}" name="{{ form.quantity_q.name }}" required="required">
+          <!-- (конец) Количество вопросов -->
+          <!-- Количество ответов -->
+          <input type="hidden" min="2" max="8" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="{{ form.quantity_a.value}}" id="id_{{ form.quantity_a.name }}" name="{{ form.quantity_a.name }}" required="required">
+          <!--(конец) Количество ответов -->
+          <!--Группа кнопок -->
+          <div class="button_block_test d-flex {% if object == None %} justify-content-between {% else %} justify-content-end {% endif %} align-items-center my-3">
+            <!-- Изменить параметры -->
+            {% if object == None %}
+            <div class="settings_button text-left">
+              <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#SettingsModal" onclick="getSettings({'quantity_q': '{{ form.quantity_q.value }}','quantity_a': '{{ form.quantity_a.value  }}'
+                })"><b>Изменить параметры</b></button>
+            </div>
+            {% endif %}
+            <!-- (конец) Изменить параметры -->
+            <!-- Сохранить -->
+            <div class="save_button text-right">
+              <button type="submit" class="btn btn-success btn-lg"><b>Сохранить тест</b></button>
+            </div>
+            <!-- (конец) Сохранить -->
+          </div>
+          <!-- (конец) Группа кнопок -->
+          <!-- (шаблон) Формсет вопросов и ответов -->
+          {% include 'testformset/test_answer_input.html' %}
+          <!-- (шаблон) Формсет вопросов и ответов -->
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Модальное окно Изменение параметров-->
+<div class="modal fade" id="SettingsModal" tabindex="-1" aria-labelledby="SettingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bold text-muted" id="SettingsModalLabel"><b>Изменить параметры теста</b></h5>
+        <button id="close_button" type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Количество вопросов -->
+        <div class="input-group input-group-lg mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="label_settings_questions">Количество вопросов</span>
+          </div>
+          <input type="number" min="5" max="30" class="form-control" aria-label="Sizing example input" aria-describedby="label_settings_questions" value="" id="input_settings_questions" required="required">
+        </div>
+        <!-- (конец) Количество вопросов -->
+        <!-- Количество ответов -->
+        <div class="input-group input-group-lg mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="label_settings_answers">Варианты ответа</span>
+          </div>
+          <input type="number" min="2" max="8" class="form-control" aria-label="Sizing example input" aria-describedby="label_settings_answers" value="" id="input_settings_answers" required="required">
+        </div>
+        <!-- (конец) Количество ответов -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>Закрыть</b></button>
+        <button type="button" class="btn btn-danger" onclick='insertSettings()'><b>Изменить параметры</b></button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- (конец) Модальное окно Изменение параметров-->
+<script>
+  function getSettings(data){
+  	input_settings_questions.setAttribute('value', data.quantity_q);
+  	input_settings_answers.setAttribute('value', data.quantity_a);
+  	
+  }
+  function insertSettings(){
+  	let quantity_q = $('#input_settings_questions').val();
+  	let quantity_a = $('#input_settings_answers').val();
+  	$('#id_{{ form.quantity_q.name }}').val(quantity_q);
+  	$('#id_{{ form.quantity_a.name }}').val(quantity_a);
+  	$('#close_button').click();
+  	$.post( "{% url 'testformset:set_params' %}", { q: quantity_q, 
+  																	a: quantity_a })
+  	.done(function( data ) {
+  	$('.group-answers').html(data);
+  	});
+  }
+</script>
 {% endblock main_data %}
